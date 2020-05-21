@@ -24,14 +24,14 @@ int main(void) {
 	ePrestamo prestamos[CANT_PRESTAMOS];
 	int idCliente=2000;
 	int idPrestamo=1;
-	int opcionMenu,opcionSubMenu;
+	int opcionMenu,opcionSubMenu,opcionSubMenu2;
 
 	setbuf(stdout,NULL);
 
 	inicializarClientes(clientes, CANT_CLIENTES);
 	inicializarPrestamo(prestamos, CANT_PRESTAMOS);
-	//idCliente+=harcodearClientes(clientes, CANT_CLIENTES, 10);
-	//idPrestamo+=harcodearPrestamos(prestamos, CANT_PRESTAMOS, 12);
+	idCliente+=harcodearClientes(clientes, CANT_CLIENTES, 10);
+	idPrestamo+=harcodearPrestamos(prestamos, CANT_PRESTAMOS, 13);
 	do{
 		menu();
 		utn_getNumeroInt(&opcionMenu, "Opcion : ", "\nError, intente nuevamente\n",1,11, 6);
@@ -96,7 +96,7 @@ int main(void) {
 			break;
 		case 9:
 			subMenu();
-			utn_getNumeroInt(&opcionSubMenu, "Opcion : ", "\nError, intente nuevamente\n",1,2, 3);
+			utn_getNumeroInt(&opcionSubMenu, "Opcion : ", "\nError, intente nuevamente\n",1,3, 3);
 			switch(opcionSubMenu){
 			case 1:
 				if(!(prestamosActivos(prestamos,CANT_PRESTAMOS)) && !(clientesActivos(clientes,CANT_CLIENTES)))
@@ -112,15 +112,44 @@ int main(void) {
 					errorAmbos();
 				pauseYLimpia();
 				break;
+			case 3:
+				if(!(prestamosActivos(prestamos,CANT_PRESTAMOS)) && !(clientesActivos(clientes,CANT_CLIENTES)))
+					mostrarClienteConMasPrestamos(clientes, CANT_CLIENTES, prestamos,CANT_PRESTAMOS);
+				else
+					errorAmbos();
+				pauseYLimpia();
+				break;
+
 			}
 			break;
 		case 10:
-			if(!(prestamosActivos(prestamos,CANT_PRESTAMOS)) && !(clientesActivos(clientes,CANT_CLIENTES)))
-				prestamosDeImporteIngresadoMayorA1000(prestamos,CANT_PRESTAMOS);
-			else
-				errorAmbos();
-			pauseYLimpia();
-			break;
+			subMenu2();
+			utn_getNumeroInt(&opcionSubMenu2, "Opcion : ", "\nError, intente nuevamente\n",1,3, 3);
+			switch(opcionSubMenu2){
+			case 1:
+				if(!(prestamosActivos(prestamos,CANT_PRESTAMOS)) && !(clientesActivos(clientes,CANT_CLIENTES)))
+					prestamosDeImporteIngresadoMayorA1000(prestamos,CANT_PRESTAMOS);
+				else
+					errorAmbos();
+				pauseYLimpia();
+				break;
+			case 2:
+				if(!(prestamosActivos(prestamos,CANT_PRESTAMOS)) && !(clientesActivos(clientes,CANT_CLIENTES)))
+					prestamosDe12CuotasSaldados(prestamos,CANT_PRESTAMOS,clientes, CANT_CLIENTES);
+				else
+					errorAmbos();
+				pauseYLimpia();
+				break;
+			case 3:
+				if(!(prestamosActivos(prestamos,CANT_PRESTAMOS)) && !(clientesActivos(clientes,CANT_CLIENTES)))
+					prestamosActivosPorCantidadDeCuotas(prestamos,CANT_PRESTAMOS,clientes, CANT_CLIENTES);
+				else
+					errorAmbos();
+				pauseYLimpia();
+				break;
+
+			}
+
 		}
 	}while(opcionMenu!=11);
 

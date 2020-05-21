@@ -100,4 +100,11 @@ int clientesActivos(eCliente vector[], int tam);
  * return 0 si OK, -1 si error
  */
 int harcodearClientes(eCliente vector[], int tam, int cantidad);
+/*
+ * breaf Muestra por pantalla los clientes eCliente activos
+ * param vector array de eCliente
+ * param tam int tamaño del vector de eCliente
+ * return 0 si ok -1 si error
+ */
+int mostrarClientes(eCliente vector[],int tam);
 #endif /* CLIENTES_H_ */

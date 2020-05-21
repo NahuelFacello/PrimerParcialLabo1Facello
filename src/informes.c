@@ -18,9 +18,11 @@ int mostrarClienteConMasCreditosActivos(eCliente aClientes[], int tamClientes, e
 	int i,j,aux;
 	int contadorPrestamos=0;
 	int maxPrestamos=0;
+	int flag=0;
 	for(i=0;i<tamClientes;i++)
 	{
 		contadorPrestamos=0;
+
 		if(aClientes[i].isEmpty==0)
 		{
 
@@ -29,10 +31,11 @@ int mostrarClienteConMasCreditosActivos(eCliente aClientes[], int tamClientes, e
 				if(aPrestamos[j].isEmpty==0 && aPrestamos[j].idCliente==aClientes[i].idCliente && aPrestamos[j].estadoPrestamo==1)
 				{
 					contadorPrestamos++;
-					if(contadorPrestamos>maxPrestamos||aClientes[i].isEmpty==0)
+					if(contadorPrestamos>maxPrestamos||flag==0)
 					{
 						maxPrestamos=contadorPrestamos;
 						aux=aClientes[i].idCliente;
+						flag=1;
 						retorno=0;
 					}
 				}
@@ -58,7 +61,7 @@ int mostrarClienteConMasCreditosSaldados(eCliente aClientes[], int tamClientes, 
 	int i,j,aux;
 	int contadorPrestamos=0;
 	int maxPrestamos=0;
-
+	int flag=0;
 	for(i=0;i<tamClientes;i++)
 	{
 		contadorPrestamos=0;
@@ -70,7 +73,7 @@ int mostrarClienteConMasCreditosSaldados(eCliente aClientes[], int tamClientes, 
 				if(aPrestamos[j].isEmpty==0 && aPrestamos[j].idCliente==aClientes[i].idCliente && aPrestamos[j].estadoPrestamo==0)
 				{
 					contadorPrestamos++;
-					if(contadorPrestamos>maxPrestamos||aClientes[i].isEmpty==0)
+					if(contadorPrestamos>maxPrestamos||flag==0)
 					{
 						maxPrestamos=contadorPrestamos;
 						aux=aClientes[i].idCliente;
@@ -120,6 +123,124 @@ int prestamosDeImporteIngresadoMayorA1000(ePrestamo aPrestamos[],int tamPrestamo
 	}
 	return retorno;
 }
+int mostrarClienteConMasPrestamos(eCliente aClientes[], int tamClientes, ePrestamo aPrestamos[],int tamPrestamos)
+{
+	int retorno=-1;
+	int i,j,aux;
+	int contadorPrestamos=0;
+	int maxPrestamos=0;
+	int flag=0;
+	for(i=0;i<tamClientes;i++)
+	{
+		contadorPrestamos=0;
+
+		if(aClientes[i].isEmpty==0)
+		{
+
+			for(j=0;j<tamPrestamos;j++)
+			{
+				if(aPrestamos[j].isEmpty==0 && aPrestamos[j].idCliente==aClientes[i].idCliente)
+				{
+					contadorPrestamos++;
+					if(contadorPrestamos>maxPrestamos||flag==0)
+					{
+						maxPrestamos=contadorPrestamos;
+						aux=aClientes[i].idCliente;
+						flag=1;
+						retorno=0;
+					}
+				}
+			}
+		}
+	}
+	if(maxPrestamos==0)
+	{
+		printf("\nNo hay clientes con prestamos\n");
+	}
+	else
+	{
+		printf("\nEl cliente con mas prestamos:\n");
+		mostrarClienteId(aClientes,tamClientes,aux);
+		printf("\nCon %d prestamos\n",maxPrestamos);
+	}
+	return retorno;
+}
+int prestamosDe12CuotasSaldados(ePrestamo aPrestamos[],int tamPrestamos,eCliente aClientes[], int tamClientes)
+{
+	int retorno=-1;
+	int i,j;
+	int contadorPrestamos=0;
+	int flag=-1;
+	eCUIL auxCuil;
+
+	printf("\n********** PRESTAMOS DE 12 CUOTAS SALDADOS******\n");
+	printf("\nID  IMPORTE    CUOTAS   ESTADO  CUIL CLIENTE\n\n");
+	for(i=0;i<tamClientes;i++)
+	{
+		if(aClientes[i].isEmpty==0)
+		{
+			for(j=0;j<tamPrestamos;j++)
+			{
+				if(aPrestamos[j].isEmpty==0 && aPrestamos[j].idCliente==aClientes[i].idCliente && aPrestamos[j].cantCuotas==12 && aPrestamos[j].estadoPrestamo==0 )
+				{
+
+					auxCuil=aClientes[i].cuil;
+					imprimirPrestamo(aPrestamos,tamPrestamos, i, auxCuil);
+					contadorPrestamos++;
+					flag=0;
+				}
+			}
+		}
+	}
+	if(flag==-1)
+	{
+		printf("\nNo se encontro ningun prestamo de 12 cuotas saldado\n");
+	}
+	else
+	{
+		printf("\nHay %d prestamos de 12 cuotas saldados\n",contadorPrestamos);
+		retorno=0;
+	}
+	return retorno;
+}
+int prestamosActivosPorCantidadDeCuotas(ePrestamo aPrestamos[],int tamPrestamos,eCliente aClientes[], int tamClientes)
+{
+	int retorno=-1;
+	int i,j;
+	int cantidadDeCuotas;
+	int contadorPrestamos=0;
+	int flag=-1;
+	eCUIL auxCuil;
+
+	utn_getNumeroInt(&cantidadDeCuotas, "\nIngrese la cantidad de cuotas para realizar el informe: ", "\nError, por favor reintente\n",12, 72,3);
+	printf("\nID  IMPORTE    CUOTAS   ESTADO  CUIL CLIENTE\n\n");
+	for(i=0;i<tamClientes;i++)
+	{
+		if(aClientes[i].isEmpty==0)
+		{
+			for(j=0;j<tamPrestamos;j++)
+			{
+				if(aPrestamos[j].isEmpty==0 && aPrestamos[j].idCliente==aClientes[i].idCliente && aPrestamos[j].cantCuotas==cantidadDeCuotas && aPrestamos[j].estadoPrestamo==1)
+				{
+					auxCuil=aClientes[i].cuil;
+					imprimirPrestamo(aPrestamos,tamPrestamos, i, auxCuil);
+					contadorPrestamos++;
+					flag=0;
+				}
+			}
+		}
+	}
+	if(flag==-1)
+	{
+		printf("\nNo se encontro ningun prestamo de %d cuotas activo\n",cantidadDeCuotas);
+	}
+	else
+	{
+		printf("\nHay %d prestamos de %d cuotas activos\n",contadorPrestamos,cantidadDeCuotas);
+		retorno=0;
+	}
+	return retorno;
+}
 void menu()
 {
 	printf("\n********** PRESTAMOS PERSONALES **********\n\n");
@@ -132,12 +253,13 @@ void menu()
 			"7) Imprimir clientes con prestamos activos\n"
 			"8) Imprimir prestamos activos\n"
 			"9) Informar clientes\n"
-			"10) Informar prestamos por importes\n"
+			"10) Informar prestamos\n"
 			"11) Salir\n");
 }
 void subMenu()
 {
-	printf("\t1) Cliente con mas prestamos activos\n\t2) Cliente con mas prestamos saldados\n");
+	printf("\t1) Cliente con mas prestamos activos\n\t2) Cliente con mas prestamos saldados\n"
+			"\t3) Cliente con mas prestamos\n");
 }
 void pauseYLimpia()
 {
@@ -156,4 +278,9 @@ void errorPrestamos()
 void errorAmbos()
 {
 	printf("\nInformacion insuficiente para realizar el informe\n");
+}
+void subMenu2()
+{
+	printf("\t1) Informe de prestamos por importes\n\t2) Prestamos de 12 cuotas saldados\n"
+			"\t3) Prestamos activos por cantidad de cuotas\n");
 }

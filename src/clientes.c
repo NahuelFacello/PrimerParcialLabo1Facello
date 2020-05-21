@@ -166,6 +166,7 @@ int modificarCliente(eCliente vector[], int tam)
 
 	printf("\n*****************MODIFICAR CLIENTES ***************\n");
 
+	mostrarClientes(vector,tam);
 	utn_getNumeroInt(&idCliente,"\nIngrese el ID del cliente que desea modificar: ", "\nError, por favor intente de nuevo\n",2000,2050,3);
 	for(i=0;i<tam;i++)
 	{
@@ -273,4 +274,22 @@ int harcodearClientes(eCliente vector[], int tam, int cantidad)
 		}
 	}
 	return contador;
+}
+int mostrarClientes(eCliente vector[],int tam)
+{
+	int i;
+	int retorno=-1;
+	printf("\nID   NOMBRE    APELLIDO    CUIL\n");
+	for(i=0; i < tam;i++)
+	{
+		if(vector[i].isEmpty==0)
+		{
+			printf("\n%d",vector[i].idCliente);
+			printf("%10s",vector[i].nombre);
+			printf("%10s",vector[i].apellido);
+			printf("%4d-%ld-%d",vector[i].cuil.tipo,vector[i].cuil.DNI,vector[i].cuil.aleatorio);
+			retorno=0;
+		}
+	}
+	return retorno;
 }

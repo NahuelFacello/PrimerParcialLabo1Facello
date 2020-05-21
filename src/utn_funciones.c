@@ -274,7 +274,6 @@ int getArrayFloat(float *pArray, int limite, char *pMensaje,char *pMensajeError,
 		{
 			printf("%s",errorMessage);
 			retries--;
-			system("cls");
 		}else
 		{
 		   *pChar=letter;

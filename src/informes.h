@@ -9,8 +9,10 @@
 #define INFORMES_H_
 //Menu de opciones
 void menu();
-//Sub menu de opciones para informes
+//Sub menu de opciones para informes de clientes
 void subMenu();
+// Sub menu para opciones de informes de prestamos
+void subMenu2();
 //pausa en la consola y limpia la consola
 void pauseYLimpia();
 //Mensaje de error si no hay prestamos activos
@@ -44,6 +46,23 @@ int mostrarClienteConMasCreditosSaldados(eCliente aClientes[], int tamClientes, 
  * return 0 si ok -1 si error
  */
 int prestamosDeImporteIngresadoMayorA1000(ePrestamo aPrestamos[],int tamPrestamos);
+/*
+ * breaf Muestra los prestamos por cantidad de cuotas ingresado por consola
+ * param aCliente eCliente, para validar el cliente
+ * param tamCliente int, para recorrer el vector de eCliente
+ * param aPrestamo array de ePrestamo
+ * param tamPrestamo int tamaño del vector de ePrestamo
+ * return 0 si ok -1 si error
+ */
+int prestamosActivosPorCantidadDeCuotas(ePrestamo aPrestamos[],int tamPrestamos,eCliente aClientes[], int tamClientes);
 
-
+/*
+ * breaf Imprime por consola los prestamos de 12 cuotas ya saldados
+ * param aCliente eCliente, para validar el cliente
+ * param tamCliente int, para recorrer el vector de eCliente
+ * param aPrestamo array de ePrestamo
+ * param tamPrestamo int tamaño del vector de ePrestamo
+ * return 0 si ok -1 si error
+ */
+int prestamosDe12CuotasSaldados(ePrestamo aPrestamos[],int tamPrestamos,eCliente aClientes[], int tamClientes);
 #endif /* INFORMES_H_ */

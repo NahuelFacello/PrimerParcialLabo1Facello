@@ -116,4 +116,32 @@ int prestamosActivos(ePrestamo aPrestamo[], int tamPrestamo);
  * return 0 si OK, -1 si error
  */
 int harcodearPrestamos(ePrestamo aPrestamo[], int tamPrestamo, int cantidad);
+/*
+ * breaf Imprime todos prestamos que se encuntren inactivos
+ * param aPrestamo array de ePrestamo
+ * param tamPrestamo int tamaño del vector de ePrestamo
+ * param aClientes eCliente, para validar el cliente
+ * param tamCliente int, para recorrer el vector de eCliente
+ * return 0 si ok -1 si error
+ */
+int imprimirPrestamosInactivos(ePrestamo aPrestamo[],int tamPrestamo, eCliente aClientes[], int tamClientes);
+/*
+ * breaf Muestra por pantalla el cliente que tiene mas prestamos solicitados, dados de baja o no
+ * param aPrestamo array de ePrestamo
+ * param tamPrestamo int tamaño del vector de ePrestamo
+ * param aClientes eCliente, para validar el cliente
+ * param tamCliente int, para recorrer el vector de eCliente
+ * return 0 si ok -1 si error
+ */
+int mostrarClienteConMasPrestamos(eCliente aClientes[], int tamClientes, ePrestamo aPrestamos[],int tamPrestamos);
+/*
+ * breaf Muestra por pantalla los prestamos inactivos de 12 cuotas
+ * param aPrestamo array de ePrestamo
+ * param tamPrestamo int tamaño del vector de ePrestamo
+ * param aClientes eCliente, para validar el cliente
+ * param tamCliente int, para recorrer el vector de eCliente
+ * return 0 si ok -1 si error
+ */
+int imprimirPrestamosInactivosDe12cuotas(ePrestamo aPrestamo[],int tamPrestamo, eCliente aClientes[], int tamClientes);
+
 #endif /* PRESTAMO_H_ */

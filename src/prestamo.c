@@ -43,11 +43,11 @@ void imprimirPrestamo(ePrestamo aPrestamo[],int tamPrestamo, int indice, eCUIL c
 	{
 		if(aPrestamo[indice].estadoPrestamo==1)
 		{
-			printf("%4d %8.2f %4d %10s %d-%ld-%d",aPrestamo[indice].idPrestamo, aPrestamo[indice].importe,aPrestamo[indice].cantCuotas,activo,cuilCliente.tipo,cuilCliente.DNI,cuilCliente.aleatorio);
+			printf("%d %10.2f %6d %10s %d-%ld-%d\n",aPrestamo[indice].idPrestamo, aPrestamo[indice].importe,aPrestamo[indice].cantCuotas,activo,cuilCliente.tipo,cuilCliente.DNI,cuilCliente.aleatorio);
 		}
 		else
 		{
-			printf("%4d %8.2f %4d %10s %d-%ld-%d",aPrestamo[indice].idPrestamo, aPrestamo[indice].importe,aPrestamo[indice].cantCuotas,cancelado,cuilCliente.tipo,cuilCliente.DNI,cuilCliente.aleatorio);
+			printf("%d %10.2f %6d %10s %d-%ld-%d\n",aPrestamo[indice].idPrestamo, aPrestamo[indice].importe,aPrestamo[indice].cantCuotas,cancelado,cuilCliente.tipo,cuilCliente.DNI,cuilCliente.aleatorio);
 		}
 	}
 
@@ -153,11 +153,11 @@ int saldarPrestamo(ePrestamo aPrestamo[],int tamPrestamo, eCliente aClientes[],i
 	char respuesta;
 
 	printf("\n***************SALDAR PRESTAMO************\n");
-
+	imprimirPrestamosActivos(aPrestamo, tamPrestamo,aClientes, tamClientes);
 	utn_getNumeroInt(&idPrestamo,"\nIngrese el ID del prestamo que desea saldar :", "Error, por favor intente de nuevo\n",1,50,3);
 	for(i=0; i< tamPrestamo;i++)
 	{
-		if(aPrestamo[i].idPrestamo==idPrestamo && aPrestamo[i].isEmpty==0 )
+		if(aPrestamo[i].idPrestamo==idPrestamo && aPrestamo[i].isEmpty==0 && aPrestamo[i].estadoPrestamo==1 )
 		{
 			aux=i;
 			flag=1;
@@ -195,8 +195,8 @@ int bajaCliente(eCliente vector[],int tam,ePrestamo aPrestamo[], int tamPrestamo
 	int aux, auxEstadoPrestamo;
 	int contadorPrestamosActivos=0;
 	printf("\n*****************BAJA CLIENTES ***************\n");
-
-	utn_getNumeroInt(&idCliente,"\nIngrese el id del cliente que desea dar de baja\n", "Error, por favor intente de nuevo\n",2000,2050,3);
+	mostrarClientes(vector,tam);
+	utn_getNumeroInt(&idCliente,"\nIngrese el id del cliente que desea dar de baja : ", "Error, por favor intente de nuevo\n",2000,2050,3);
 	for(i=0;i<tam;i++)
 	{
 		if(vector[i].idCliente==idCliente && vector[i].isEmpty==0)
@@ -290,7 +290,8 @@ int reanudarPrestamo(ePrestamo aPrestamo[],int tamPrestamo, eCliente aClientes[]
 	int flag=-1;
 	char respuesta;
 	printf("\n********* REANUDAR PRESTAMO *********\n\n");
-	utn_getNumeroInt(&idPrestamo,"\nIngrese el id del prestamo que desea reanudar\n", "Error, por favor intente de nuevo\n",1,50,3);
+	imprimirPrestamosInactivos(aPrestamo,tamPrestamo,aClientes,tamClientes);
+	utn_getNumeroInt(&idPrestamo,"\nIngrese el id del prestamo que desea reanudar : ", "Error, por favor intente de nuevo\n",1,50,3);
 	for(i=0;i<tamPrestamo;i++)
 	{
 		if(aPrestamo[i].idPrestamo==idPrestamo && aPrestamo[i].estadoPrestamo==0)
@@ -299,7 +300,7 @@ int reanudarPrestamo(ePrestamo aPrestamo[],int tamPrestamo, eCliente aClientes[]
 			{
 				if(aClientes[j].idCliente==aPrestamo[i].idCliente)
 				{
-					auxCliente=j;
+					auxCliente=aClientes[j].idCliente;
 					auxPrestamo=i;
 					flag=0;
 				}
@@ -310,7 +311,7 @@ int reanudarPrestamo(ePrestamo aPrestamo[],int tamPrestamo, eCliente aClientes[]
 	if(flag==0)
 	{
 		mostrarClienteId(aClientes,tamClientes,auxCliente);
-		utn_getAnswer(&respuesta,"\nEsta seguro que desea reanudar el prestamo? s/n \n", "\nOpcion incorrecta\n", 3);
+		utn_getAnswer(&respuesta,"\nEsta seguro que desea reanudar el prestamo? s/n :", "\nOpcion incorrecta\n", 3);
 		if(respuesta=='s')
 		{
 			aPrestamo[auxPrestamo].estadoPrestamo=1;
@@ -356,9 +357,10 @@ int harcodearPrestamos(ePrestamo aPrestamo[], int tamPrestamo, int cantidad)
 			{10,2009,12000,12,0,1},
 			{11,2008,8000,24,0,1},
 			{12,2002,15000,36,0,0},
+			{13,2008,12000,12,0}
 	};
 
-	if(cantidad<13 && cantidad<=tamPrestamo)
+	if(cantidad<14 && cantidad<=tamPrestamo)
 	{
 		for(i=0;i < cantidad; i++)
 		{
@@ -367,4 +369,60 @@ int harcodearPrestamos(ePrestamo aPrestamo[], int tamPrestamo, int cantidad)
 		}
 	}
 	return contador;
+}
+int imprimirPrestamosInactivos(ePrestamo aPrestamo[],int tamPrestamo, eCliente aClientes[], int tamClientes)
+{
+	int retorno=-1;
+	int i,j,flag=-1;
+	eCUIL auxCuil;
+	printf("\nID  IMPORTE    CUOTAS   ESTADO  CUIL CLIENTE\n\n");
+	for(i=0; i< tamPrestamo;i++)
+	{
+		if(aPrestamo[i].estadoPrestamo==0 && aPrestamo[i].isEmpty==0)
+		{
+			for(j=0;j<tamClientes;j++)
+			{
+				if(aPrestamo[i].idCliente==aClientes[j].idCliente)
+				{
+					auxCuil=aClientes[j].cuil;
+				}
+			}
+			imprimirPrestamo(aPrestamo,tamPrestamo, i, auxCuil);
+			flag=0;
+			retorno=0;
+		}
+	}
+	if(flag==-1)
+	{
+		printf("\nTodos los prestamos estan activos\n");
+	}
+	return retorno;
+}
+int imprimirPrestamosInactivosDe12cuotas(ePrestamo aPrestamo[],int tamPrestamo, eCliente aClientes[], int tamClientes)
+{
+	int retorno=-1;
+	int i,j,flag=-1;
+	eCUIL auxCuil;
+	printf("\nID  IMPORTE    CUOTAS   ESTADO  CUIL CLIENTE\n\n");
+	for(i=0; i< tamPrestamo;i++)
+	{
+		if(aPrestamo[i].estadoPrestamo==0 && aPrestamo[i].isEmpty==0&& aPrestamo[i].cantCuotas==12)
+		{
+			for(j=0;j<tamClientes;j++)
+			{
+				if(aPrestamo[i].idCliente==aClientes[j].idCliente)
+				{
+					auxCuil=aClientes[j].cuil;
+				}
+			}
+			imprimirPrestamo(aPrestamo,tamPrestamo, i, auxCuil);
+			flag=0;
+			retorno=0;
+		}
+	}
+	if(flag==-1)
+	{
+		printf("\nTodos los prestamos estan activos\n");
+	}
+	return retorno;
 }
